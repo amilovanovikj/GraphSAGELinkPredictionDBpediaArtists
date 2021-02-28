@@ -1,0 +1,44 @@
+# GENRES
+
+select distinct ?artist_name ?genre
+where {
+    {
+        ?sbj dbo:musicalArtist ?artist .
+    } union {
+        ?artist dbo:associatedMusicalArtist ?obj .
+    } union {
+        ?sbj1 dbo:associatedMusicalArtist ?artist .
+    }
+    ?artist rdfs:label ?artist_name .
+
+    ?artist dbo:genre ?genre_uri .
+    ?genre_uri rdfs:label ?genre .
+
+    filter(lang(?genre)="en")
+    filter(lang(?artist_name)="en")
+    filter(regex(?artist_name, INSRET_REGEX))
+}
+order by ?artist_name
+offset INSERT_OFFSET
+
+-----------------------------------------------------------------------------------------------------
+
+# GRAPH
+
+select distinct ?artist_name1 ?artist_name2
+where {
+    ?artist1 dbo:associatedMusicalArtist ?artist2 .
+
+    ?artist1 rdfs:label ?artist_name1 ;
+    dbo:genre ?genre_uri1 .
+    ?genre_uri1 rdfs:label ?genre1 .
+
+    ?artist2 rdfs:label ?artist_name2 ;
+    dbo:genre ?genre_uri2 .
+    ?genre_uri2 rdfs:label ?genre2 .
+
+    filter(lang(?artist_name1)="en")
+    filter(lang(?artist_name2)="en")
+}
+order by ?artist_name1
+offset INSERT_OFFSET
