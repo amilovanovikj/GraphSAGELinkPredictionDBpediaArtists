@@ -16,7 +16,6 @@ where {
 
     filter(lang(?genre)="en")
     filter(lang(?artist_name)="en")
-    filter(regex(?artist_name, INSRET_REGEX))
 }
 order by ?artist_name
 offset INSERT_OFFSET
